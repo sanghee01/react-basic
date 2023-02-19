@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    const App = () => {
+      const [counter, setCounter] = React.useState(0);
+      const [keyword, setKeyword] = React.useState("");
+      const onClick = () => setCounter((current) => current + 1);
+      const onChange = () => setKeyword(event.target.value);
+      console.log("i run all the time");
+      React.useEffect(() => {
+        console.log("I run only once.");
+      }, []);
+      React.useEffect(() => {
+        console.log("I run when 'keyword' changes.", keyword);
+      }, [keyword]);
+      React.useEffect(() => {
+        console.log("I run when 'counter' changes.");
+      }, [counter]);
+
+      return (
+        <div>
+          <input
+            value={keyword}
+            onChange={onChange}
+            type="text"
+            placehoder="Search here..."
+          />
+          <h3>{counter}</h3>
+          <button onClick={onClick}>Click me</button>
+        </div>
+      );
+    };
+
+    root.render(<App />);
+  </script>
+</html>
