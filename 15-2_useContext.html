@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="15_useContext.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    const ThemeContext = React.createContext(null);
+    const UserContext = React.createContext(null);
+
+    const App = () => {
+      const [isDark, setIsDark] = React.useState(false);
+
+      return (
+        <UserContext.Provider value={"사용자"}>
+          <ThemeContext.Provider value={{ isDark, setIsDark }}>
+            <Page />
+          </ThemeContext.Provider>
+        </UserContext.Provider>
+      );
+    };
+
+    const Page = () => {
+      return (
+        <div className="page">
+          <Header />
+          <Content />
+          <Footer />
+        </div>
+      );
+    };
+
+    const Header = () => {
+      const { isDark } = React.useContext(ThemeContext);
+      const user = React.useContext(UserContext);
+
+      return (
+        <header
+          className="header"
+          style={{
+            backgroundColor: isDark ? "black" : "lightgray",
+            color: isDark ? "white" : "black",
+          }}
+        >
+          <h1>Welcome {user}!</h1>
+        </header>
+      );
+    };
+
+    const Content = () => {
+      const { isDark } = React.useContext(ThemeContext);
+      const user = React.useContext(UserContext);
+
+      return (
+        <div
+          className="content"
+          style={{
+            backgroundColor: isDark ? "black" : "lightgray",
+            color: isDark ? "white" : "black",
+          }}
+        >
+          <p>{user}님, 좋은 하루 되세요</p>
+        </div>
+      );
+    };
+
+    const Footer = () => {
+      const { isDark, setIsDark } = React.useContext(ThemeContext);
+
+      const toggleTheme = () => {
+        setIsDark(!isDark);
+      };
+      return (
+        <footer
+          className="footer"
+          style={{ backgroundColor: isDark ? "black" : "lightgray" }}
+        >
+          <button className="button" onClick={toggleTheme}>
+            Dark Mode
+          </button>
+        </footer>
+      );
+    };
+
+    root.render(<App />);
+  </script>
+</html>
