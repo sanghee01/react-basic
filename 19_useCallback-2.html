@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    const Box = ({ createBoxStyle }) => {
+      const [style, setStyle] = React.useState({});
+      React.useEffect(() => {
+        console.log("박스 키우기");
+        setStyle(createBoxStyle(createBoxStyle()));
+      }, [createBoxStyle]);
+      return <div style={style}></div>;
+    };
+
+    const App = () => {
+      const [size, setSizes] = React.useState(100);
+      const [isDark, setIsDark] = React.useState(false);
+
+      const createBoxStyle = React.useCallback(() => {
+        return {
+          backgroundColor: "pink",
+          width: `${size}px`,
+          height: `${size}px`,
+        };
+      }, [size]);
+
+      return (
+        <div style={{ background: isDark ? "black" : "white" }}>
+          <input
+            type="number"
+            value={size}
+            onChange={(e) => setSizes(e.target.value)}
+          />
+          <button onClick={() => setIsDark(!isDark)}>Change Theme</button>
+          <Box createBoxStyle={createBoxStyle} />
+        </div>
+      );
+    };
+
+    root.render(<App />);
+  </script>
+</html>
