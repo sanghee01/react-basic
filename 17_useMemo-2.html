@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    const App = () => {
+      const [number, setNumber] = React.useState(0);
+      const [isKorea, setIsKorea] = React.useState(true);
+
+      const location = React.useMemo(() => {
+        return { country: isKorea ? "한국" : "외국" };
+      }, [isKorea]);
+
+      React.useEffect(() => {
+        console.log("useEffect 호출");
+      }, [location]);
+
+      return (
+        <div>
+          <h2>하루에 몇 끼 먹어요?</h2>
+          <input
+            type="number"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+          />
+          <hr />
+          <h2>어느 나라에 있어요?</h2>
+          <p>나라: {location.country}</p>
+          <button onClick={() => setIsKorea(!isKorea)}>비행기 타자</button>
+        </div>
+      );
+    };
+
+    root.render(<App />);
+  </script>
+</html>
