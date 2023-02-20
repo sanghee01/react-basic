@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    const App = () => {
+      const inputRef = React.useRef();
+
+      React.useEffect(() => {
+        inputRef.current.focus();
+      }, []);
+
+      const login = () => {
+        alert(`환영합니다 ${inputRef.current.value}!`);
+        inputRef.current.focus();
+      };
+
+      return (
+        <div>
+          <input ref={inputRef} type="text" placeholder="username" />
+          <button onClick={login}>로그인</button>
+        </div>
+      );
+    };
+
+    root.render(<App />);
+  </script>
+</html>
