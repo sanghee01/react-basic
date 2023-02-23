@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    // reducer - state 업데이트 (은행)
+    // dispatch - state 업데이트를 위한 요구
+    // action - 요구의 내용
+
+    const ACTION_TYPES = {
+      deposit: "deposit 변수명 바꿔도 잘 동작",
+      withdraw: "withdraw",
+    };
+    const reducer = (state, action) => {
+      console.log("reducer가 일을 합니다", state, action);
+      switch (action.type) {
+        case ACTION_TYPES.deposit:
+          return state + action.payload;
+        case ACTION_TYPES.withdraw:
+          return state - action.payload;
+        default:
+          return state;
+      }
+    };
+
+    const App = () => {
+      const [number, setNumber] = React.useState(0);
+      const [money, dispatch] = React.useReducer(reducer, 0);
+      return (
+        <div>
+          <h2>useReducer 은행에 오신 것을 환영합니다</h2>
+          <p>잔고: {money}원</p>
+          <input
+            type="number"
+            value={number}
+            onChange={(e) => setNumber(parseInt(e.target.value))}
+            step="1000"
+          />
+          <button
+            onClick={() => {
+              dispatch({ type: ACTION_TYPES.deposit, payload: number });
+            }}
+          >
+            예금
+          </button>
+          <button
+            onClick={() => {
+              dispatch({ type: ACTION_TYPES.withdraw, payload: number });
+            }}
+          >
+            출금
+          </button>
+        </div>
+      );
+    };
+
+    root.render(<App />);
+  </script>
+</html>

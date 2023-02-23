@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    // reducer - state 업데이트 (은행)
+    // dispatch - state 업데이트를 위한 요구
+    // action - 요구의 내용
+
+    const Student = ({ name, dispatch, id, isHere }) => {
+      return (
+        <div>
+          <span
+            style={{
+              textDecoration: isHere ? "line-through" : "none",
+              color: isHere ? "gray" : "black",
+            }}
+            onClick={() => {
+              dispatch({ type: "mark-student", payload: { id } });
+            }}
+          >
+            {name}
+          </span>
+          <button
+            onClick={() => {
+              dispatch({ type: "delete-student", payload: { id } });
+            }}
+          >
+            삭제
+          </button>
+        </div>
+      );
+    };
+
+    const reducer = (state, action) => {
+      switch (action.type) {
+        case "add-student":
+          const name = action.payload.name;
+          const newStudent = {
+            id: Date.now(),
+            name,
+            isHere: false,
+          };
+          return {
+            count: state.count + 1,
+            students: [...state.students, newStudent],
+          };
+        case "delete-student":
+          return {
+            count: state.count - 1,
+            students: state.students.filter(
+              (student) => student.id !== action.payload.id
+            ),
+          };
+        case "mark-student":
+          return {
+            count: state.count, // 카운트는 그대로
+            students: state.students.map((student) => {
+              // 클릭된 학생은 isHere 바꿔줌
+              if (student.id === action.payload.id) {
+                return { ...student, isHere: !student.isHere };
+              }
+              return student; // 나머지 학생들은 그대로 리턴
+            }),
+          };
+        default:
+          return state;
+      }
+    };
+
+    const initialState = {
+      count: 0,
+      students: [],
+    };
+
+    const App = () => {
+      const [name, setName] = React.useState("");
+      const [studensInfo, dispatch] = React.useReducer(reducer, initialState);
+
+      return (
+        <div>
+          <h1>출석부</h1>
+          <p>총 학생 수: {studensInfo.count}</p>
+          <input
+            type="text"
+            placeholder="이름을 입력해주세요"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <button
+            onClick={() => {
+              dispatch({ type: "add-student", payload: { name } });
+            }}
+          >
+            추가
+          </button>
+          {studensInfo.students.map((student) => {
+            return (
+              <Student
+                key={student.id}
+                name={student.name}
+                dispatch={dispatch}
+                id={student.id}
+                isHere={student.isHere}
+              />
+            );
+          })}
+        </div>
+      );
+    };
+
+    root.render(<App />);
+  </script>
+</html>
